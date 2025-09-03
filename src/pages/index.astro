@@ -2,9 +2,8 @@
 import PlotFigure from "../components/PlotFigure.astro";
 import * as Plot from "@observablehq/plot";
 import penguins from "../assets/penguins.json";
-import diamonds from "../assets/diamonds.json";
 import data from "../assets/data.json";
-
+import presidents from "../assets/presidents.json";
 ---
 
 <html lang="en">
@@ -42,6 +41,35 @@ import data from "../assets/data.json";
 								},
 							}),
 							Plot.ruleY([0]),
+						],
+					}}
+				/>
+			</div>
+
+			<div>
+				<PlotFigure
+					options={{
+						x: { inset: 20, label: "First inauguration date →" },
+						y: {
+							insetTop: 4,
+							grid: true,
+							label: "↑ Any opinion (%)",
+							tickFormat: "+f",
+						},
+						marks: [
+							Plot.ruleY([0]),
+							Plot.image(presidents, {
+								x: "First Inauguration Date",
+								y: (d) =>
+									d["Very Favorable %"] +
+									d["Somewhat Favorable %"] +
+									d["Very Unfavorable %"] +
+									d["Somewhat Unfavorable %"],
+								src: "Portrait URL",
+								r: 20,
+								preserveAspectRatio: "xMidYMin slice",
+								title: "Name",
+							}),
 						],
 					}}
 				/>
