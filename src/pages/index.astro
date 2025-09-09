@@ -1,79 +1,121 @@
 ---
 import PlotFigure from "../components/PlotFigure.astro";
+import Header from "../components/Header.astro";
 import * as Plot from "@observablehq/plot";
 import penguins from "../assets/penguins.json";
 import data from "../assets/data.json";
 import presidents from "../assets/presidents.json";
-import volcano from "../assets/volcano.json";
+
 ---
 
 <html lang="en">
 	<body>
-		<main>
+		<main class="container mx-auto px-4 py-8">
+			<Header 
+				items={[
+					{
+						id: "penguins-graph",
+						title: "Penguins Analysis",
+						description: "Relation entre longueur et profondeur du bec"
+					},
+					{
+						id: "population-graph", 
+						title: "Population Data",
+						description: "Données de population par état et clé"
+					},
+					{
+						id: "presidents-graph",
+						title: "Presidents Favorability", 
+						description: "Cotes de popularité des présidents"
+					}
+				]}
+			/>
+			
 			<div>
-				<PlotFigure
-					options={{
-						marks: [
-							Plot.dot(penguins, {
-								x: "culmen_length_mm",
-								y: "culmen_depth_mm",
-							}),
-						],
-					}}
-				/>
+				<section id="penguins-graph" class="max-w-3xl mx-auto mb-12">
+				  <h2 class="text-2xl font-bold mb-4 text-purple-900 text-center border-b-2 border-blue-200 pb-2 uppercase">Penguins</h2>
+				  <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-gray-100">
+				    <div class="w-full flex justify-center overflow-x-auto">
+				      <PlotFigure
+				        options={{
+				          marks: [
+				            Plot.dot(penguins, {
+				              x: "culmen_length_mm",
+				              y: "culmen_depth_mm",
+				            }),
+				          ],
+				        }}
+				      />
+				    </div>
+				  </div>
+				</section>
 			</div>
 
 			<div>
-				<PlotFigure
-					options={{
-						x: { axis: null },
-						y: { tickFormat: "s", grid: true },
-						color: { scheme: "spectral", legend: true },
-						marks: [
-							Plot.barY(data, {
-								x: "key",
-								y: "population",
-								fill: "key",
-								fx: "state",
-								sort: {
-									x: null,
-									color: null,
-									fx: { value: "-y", reduce: "sum" },
-								},
-							}),
-							Plot.ruleY([0]),
-						],
-					}}
-				/>
+				<section id="population-graph" class="max-w-3xl mx-auto mb-12">
+				  <h2 class="text-2xl font-bold  mb-4 text-blue-900 text-center border-b-2 border-blue-200 pb-2 uppercase">Population by State and Key</h2>
+				  <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-gray-100">
+				    <div class="w-full flex justify-center overflow-x-auto">
+				      <PlotFigure
+				        options={{
+				          x: { axis: null },
+				          y: { tickFormat: "s", grid: true },
+				          color: { scheme: "spectral", legend: true },
+				          marks: [
+				            Plot.barY(data, {
+				              x: "key",
+				              y: "population",
+				              fill: "key",
+				              fx: "state",
+				              sort: {
+				                x: null,
+				                color: null,
+				                fx: { value: "-y", reduce: "sum" },
+				              },
+				            }),
+				            Plot.ruleY([0]),
+				          ],
+				        }}
+				      />
+				    </div>
+				  </div>
+				</section>
 			</div>
 
 			<div>
-				<PlotFigure
-					options={{
-						x: { inset: 20, label: "First inauguration date →" },
-						y: {
-							insetTop: 4,
-							grid: true,
-							label: "↑ Any opinion (%)",
-							tickFormat: "+f",
-						},
-						marks: [
-							Plot.ruleY([0]),
-							Plot.image(presidents, {
-								x: "First Inauguration Date",
-								y: (d) =>
-									d["Very Favorable %"] +
-									d["Somewhat Favorable %"] +
-									d["Very Unfavorable %"] +
-									d["Somewhat Unfavorable %"],
-								src: "Portrait URL",
-								r: 20,
-								preserveAspectRatio: "xMidYMin slice",
-								title: "Name",
-							}),
-						],
-					}}
-				/>
+				<section id="presidents-graph" class="max-w-3xl mx-auto mb-12">
+				  <h2 class="text-2xl font-bold mb-4 text-yellow-900 text-center border-b-2 border-blue-200 pb-2 uppercase">Presidents: Favorability by Inauguration Date</h2>
+				  <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-gray-100">
+				    <div class="w-full flex justify-center overflow-x-auto">
+				      <PlotFigure
+				        options={{
+				          x: { inset: 20, label: "First inauguration date →" },
+				          y: {
+				            insetTop: 4,
+				            grid: true,
+				            label: "↑ Any opinion (%)",
+				            tickFormat: "+f",
+				          },
+				          marks: [
+				            Plot.ruleY([0]),
+				            Plot.image(presidents, {
+				              x: "First Inauguration Date",
+				              y: (d) =>
+				                d["Very Favorable %"] +
+				                d["Somewhat Favorable %"] +
+				                d["Very Unfavorable %"] +
+				                d["Somewhat Unfavorable %"],
+				              src: "Portrait URL",
+				              r: 20,
+				              preserveAspectRatio: "xMidYMin slice",
+				              title: "Name",
+				            }),
+				          ],
+				        }}
+				      />
+				    </div>
+				  </div>
+				</section>
 			</div>
 
 		</main>
